@@ -1,9 +1,21 @@
+import { useEffect } from "react";
 import { View, ImageBackground, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const insets = useSafeAreaInsets();
-  
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/screens/LoginScreen");
+    }, 700); // 0.7 seconds = 700 milliseconds
+
+    // Cleanup the timer if the component unmounts
+    return () => clearTimeout(timer);
+  }, [router]);
+
   return (
     <ImageBackground 
       source={require('../assets/images/main-bg.png')} 
