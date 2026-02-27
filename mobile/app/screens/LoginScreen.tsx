@@ -29,7 +29,7 @@ export default function LoginScreen() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.replace("/(tabs)/Home");
+        router.replace("/(tabs)/home");
       }
     } catch (error) {
       console.log("Error checking session:", error);
@@ -55,7 +55,7 @@ export default function LoginScreen() {
         Alert.alert("Login Failed", error.message);
       } else {
         Alert.alert("Success", "Logged in successfully!", [
-          { text: "OK", onPress: () => router.replace("/(tabs)/Home") }
+          { text: "OK", onPress: () => router.replace("/(tabs)/home") }
         ]);
       }
     } catch (error) {
@@ -66,9 +66,7 @@ export default function LoginScreen() {
   };
 
   const handleSignUp = () => {
-    // Navigate to sign up screen (create this later)
-    Alert.alert("Info", "Sign up screen coming soon!");
-    // router.push("/screens/SignUpScreen");
+    router.push("/screens/SignupScreen");
   };
 
   const handleForgotPassword = () => {
