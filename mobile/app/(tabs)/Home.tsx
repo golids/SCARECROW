@@ -14,15 +14,21 @@ function ScarecrowIcon({ size = 36 }: { size?: number }) {
   const s = size / 60;
   return (
     <View style={{ width: size, height: size * 1.1, alignItems: "center" }}>
+      {/* Hat brim */}
       <View style={{ width: 44 * s, height: 5 * s, backgroundColor: "#2d6e10", borderRadius: 3, marginTop: 2 * s }} />
+      {/* Hat top */}
       <View style={{ width: 6 * s, height: 8 * s, backgroundColor: "#1a4a08", borderRadius: 2 }} />
+      {/* Head */}
       <View style={{ width: 18 * s, height: 22 * s, backgroundColor: "#2d6e10", borderRadius: 4, alignItems: "center", justifyContent: "center" }}>
+        {/* Eyes */}
         <View style={{ flexDirection: "row", gap: 5 * s }}>
           <View style={{ width: 4 * s, height: 4 * s, backgroundColor: "#c8f078", borderRadius: 2 }} />
           <View style={{ width: 4 * s, height: 4 * s, backgroundColor: "#c8f078", borderRadius: 2 }} />
         </View>
       </View>
+      {/* Arms */}
       <View style={{ width: 52 * s, height: 5 * s, backgroundColor: "#2d6e10", borderRadius: 3, marginTop: -14 * s }} />
+      {/* Legs */}
       <View style={{ flexDirection: "row", gap: 6 * s, marginTop: 1 * s }}>
         <View style={{ width: 6 * s, height: 14 * s, backgroundColor: "#2d6e10", borderRadius: 2 }} />
         <View style={{ width: 6 * s, height: 14 * s, backgroundColor: "#2d6e10", borderRadius: 2 }} />
@@ -44,7 +50,7 @@ const ACTIVITY_LOG = [
 export default function HomeScreen() {
   return (
     <ImageBackground
-      source={require("../../assets/images/signup-bg.png")}
+      source={require("../../assets/images/home-bg.png")}
       style={styles.bg}
       resizeMode="cover"
     >
@@ -52,7 +58,7 @@ export default function HomeScreen() {
 
       <SafeAreaView style={styles.safe} edges={["top"]}>
 
-        {/* ── + BUTTON absolutely positioned top-right ── */}
+        {/* Add button absolutely positioned top-right */}
         <TouchableOpacity style={styles.addBtn}>
           <Ionicons name="add" size={22} color="#fff" />
         </TouchableOpacity>
@@ -62,10 +68,10 @@ export default function HomeScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* ── WELCOME ── */}
+          {/* Welcome Text */}
           <Text style={styles.welcome}>Welcome back, John Doe</Text>
 
-          {/* ── CONNECTION CARD ── */}
+          {/* Connection Card */}
           <View style={styles.card}>
             <View style={styles.connectionLeft}>
               <MaterialIcons name="wifi" size={18} color="#004E00" />
@@ -84,7 +90,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* ── DEVICE OVERVIEW ── */}
+          {/* Device Overview Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Device Overview</Text>
@@ -130,7 +136,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* ── RECENT ACTIVITY LOG ── */}
+          {/* Recent Activity Log Section */}
           <View style={[styles.section, { marginBottom: 100 }]}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Recent Activity Log</Text>
@@ -166,17 +172,21 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  bg: { flex: 1, width: "100%", height: "100%" },
+  bg: { 
+    flex: 1, 
+    width: "100%", 
+    height: "100%" 
+  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(200,230,160,0.18)",
   },
-  safe: { flex: 1 },
-
-  // + button absolutely positioned — sits on top of bg image, top-right
+  safe: { 
+    flex: 1 
+  },
   addBtn: {
     position: "absolute",
-    top: 12,
+    top: 50,
     right: 16,
     zIndex: 10,
     width: 38,
@@ -188,30 +198,27 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: "#080647",
   },
-
-  scroll: { flex: 1 },
+  scroll: { 
+    flex: 1 
+  },
   scrollContent: {
     paddingHorizontal: 16,
-    // ↓ This value pushes Welcome text below the bg image's drone + SCARECROW + tagline
-    // Increase if content still overlaps the bg logo, decrease if there's too much gap
-    paddingTop: 260,
+    paddingTop: 260, // Adjust this value based on your background image
   },
-
   welcome: {
     fontSize: 16,
     fontFamily: "Poppins-SemiBold",
     color: "#1a3a0d",
     marginBottom: 10,
   },
-
   card: {
     flexDirection: "row",
-    backgroundColor: "rgba(255,255,255,0.82)",
+    backgroundColor: "rgba(249, 255, 161, .8)",
     borderRadius: 14,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1.5,
-    borderColor: "#c8e890",
+    borderColor: "rgba(249, 255, 161, 1)",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -219,15 +226,39 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  connectionLeft: { flex: 1, flexDirection: "row", alignItems: "center" },
-  connectionRight: { flex: 1, flexDirection: "row", alignItems: "center", paddingLeft: 12 },
-  dividerVert: { width: 1.5, height: 36, backgroundColor: "#c8e890" },
-  connLabel: { fontSize: 10, fontFamily: "Poppins-Regular", color: "#808080" },
-  connValue: { fontSize: 13, fontFamily: "Poppins-SemiBold", color: "#1a3a0d" },
-  connValueLarge: { fontSize: 18, fontFamily: "Poppins-Bold", color: "#004E00" },
-
+  connectionLeft: { 
+    flex: 1, 
+    flexDirection: "row", 
+    alignItems: "center" 
+  },
+  connectionRight: { 
+    flex: 1, 
+    flexDirection: "row", 
+    alignItems: "center", 
+    paddingLeft: 12 
+  },
+  dividerVert: { 
+    width: 1.5, 
+    height: 36, 
+    backgroundColor: "#rgba(249, 255, 161, .8)" ,
+  },
+  connLabel: { 
+    fontSize: 10, 
+    fontFamily: "Poppins-Regular", 
+    color: "#808080" 
+  },
+  connValue: { 
+    fontSize: 13, 
+    fontFamily: "Poppins-SemiBold", 
+    color: "#1a3a0d" 
+  },
+  connValueLarge: { 
+    fontSize: 18, 
+    fontFamily: "Poppins-Bold", 
+    color: "#004E00" 
+  },
   section: {
-    backgroundColor: "rgba(255,255,255,0.82)",
+    backgroundColor: "rgba(249, 255, 161, 0.8)",
     borderRadius: 14,
     padding: 14,
     marginBottom: 14,
@@ -245,9 +276,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  sectionTitle: { fontSize: 14, fontFamily: "Poppins-SemiBold", color: "#1a3a0d" },
-  sectionLink: { fontSize: 12, fontFamily: "Poppins-Medium", color: "#004E00" },
-
+  sectionTitle: { 
+    fontSize: 14, 
+    fontFamily: "Poppins-SemiBold", 
+    color: "#1a3a0d" 
+  },
+  sectionLink: { 
+    fontSize: 12, 
+    fontFamily: "Poppins-Medium", 
+    color: "#004E00" 
+  },
   deviceRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -266,9 +304,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  deviceName: { fontSize: 13, fontFamily: "Poppins-SemiBold", color: "#1a3a0d" },
-  deviceStatus: { fontSize: 11, fontFamily: "Poppins-Regular", color: "#4a9a2e" },
-
+  deviceName: { 
+    fontSize: 13, 
+    fontFamily: "Poppins-SemiBold", 
+    color: "#1a3a0d" 
+  },
+  deviceStatus: { 
+    fontSize: 11, 
+    fontFamily: "Poppins-Regular", 
+    color: "#4a9a2e" 
+  },
   birdBanner: {
     flexDirection: "row",
     backgroundColor: "rgba(180,220,100,0.35)",
@@ -280,13 +325,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#b8dc88",
   },
-  birdBannerLeft: { flexDirection: "row", alignItems: "center", gap: 6 },
-  birdEmoji: { fontSize: 20 },
-  birdBannerText: { fontSize: 13, fontFamily: "Poppins-Regular", color: "#1a3a0d" },
-  birdBannerTotal: { fontSize: 13, fontFamily: "Poppins-Regular", color: "#1a3a0d" },
-  birdCount: { fontFamily: "Poppins-Bold", color: "#004E00" },
-
-  speciesRow: { flexDirection: "row", gap: 10 },
+  birdBannerLeft: { 
+    flexDirection: "row", 
+    alignItems: "center", 
+    gap: 6 
+  },
+  birdEmoji: { 
+    fontSize: 20 
+  },
+  birdBannerText: { 
+    fontSize: 13, 
+    fontFamily: "Poppins-Regular", 
+    color: "#1a3a0d" 
+  },
+  birdBannerTotal: { 
+    fontSize: 13, 
+    fontFamily: "Poppins-Regular", 
+    color: "#1a3a0d" 
+  },
+  birdCount: { 
+    fontFamily: "Poppins-Bold", 
+    color: "#004E00" 
+  },
+  speciesRow: { 
+    flexDirection: "row", 
+    gap: 10 
+  },
   speciesCard: {
     flex: 1,
     backgroundColor: "rgba(200,232,144,0.3)",
@@ -298,11 +362,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
-  speciesEmoji: { fontSize: 28 },
-  speciesCount: { fontSize: 12, fontFamily: "Poppins-SemiBold", color: "#1a3a0d" },
-  speciesPct: { fontSize: 11, fontFamily: "Poppins-Regular", color: "#e05a00" },
-  speciesSub: { fontSize: 9, fontFamily: "Poppins-Regular", color: "#808080" },
-
+  speciesEmoji: { 
+    fontSize: 28 
+  },
+  speciesCount: { 
+    fontSize: 12, 
+    fontFamily: "Poppins-SemiBold", 
+    color: "#1a3a0d" 
+  },
+  speciesPct: { 
+    fontSize: 11, 
+    fontFamily: "Poppins-Regular", 
+    color: "#e05a00" 
+  },
+  speciesSub: { 
+    fontSize: 9, 
+    fontFamily: "Poppins-Regular", 
+    color: "#808080" 
+  },
   logRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -320,7 +397,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logTime: { fontSize: 11, fontFamily: "Poppins-Regular", color: "#808080" },
-  logLabel: { fontSize: 13, fontFamily: "Poppins-SemiBold", color: "#1a3a0d" },
-  logAgo: { fontSize: 10, fontFamily: "Poppins-Regular", color: "#808080", marginTop: 2 },
+  logTime: { 
+    fontSize: 11, 
+    fontFamily: "Poppins-Regular", 
+    color: "#808080" 
+  },
+  logLabel: { 
+    fontSize: 13, 
+    fontFamily: "Poppins-SemiBold", 
+    color: "#1a3a0d" 
+  },
+  logAgo: { 
+    fontSize: 10, 
+    fontFamily: "Poppins-Regular", 
+    color: "#808080", 
+    marginTop: 2 
+  },
 });

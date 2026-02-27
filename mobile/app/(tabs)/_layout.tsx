@@ -1,6 +1,9 @@
+// app/(tabs)/_layout.tsx
 import { Tabs } from "expo-router";
-import { View, StyleSheet } from "react-native";
-import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet, Dimensions } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+const { width } = Dimensions.get("window");
 
 export default function TabsLayout() {
   return (
@@ -23,7 +26,7 @@ export default function TabsLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="home" size={22} color={color} />
+            <Ionicons name="home" size={22} color={color} />
           ),
         }}
       />
@@ -32,16 +35,16 @@ export default function TabsLayout() {
         options={{
           title: "Live",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="live-tv" size={22} color={color} />
+            <Ionicons name="videocam" size={22} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="logs"
         options={{
-          title: "Log",
+          title: "Logs",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="document-text" size={22} color={color} />
+            <Ionicons name="newspaper" size={22} color={color} />
           ),
         }}
       />
@@ -64,8 +67,10 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    height: 60,
-    borderRadius: 30,
+    height: 60, // Changed from implicit to explicit - increase/decrease this value
+    width: width * 1, // 90% of screen width
+    alignSelf: "center", // Centers the tab bar when width is set
+    borderRadius: 20, // Increased to match new height (height/2 for pill shape)
     backgroundColor: "transparent",
     elevation: 0,
     borderTopWidth: 0,
@@ -77,16 +82,23 @@ const styles = StyleSheet.create({
   tabBarBackground: {
     position: "absolute",
     top: 0,
-    left: 0,
-    right: 0,
+    left: 15,
+    right: 15,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderRadius: 30,
+    backgroundColor: "rgba(249, 255, 161, 1)",
+    borderRadius: 20, // Match tabBar borderRadius
     borderWidth: 1.5,
     borderColor: "#080647",
   },
   tabBarItem: {
-    paddingVertical: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    marginLeft: 10,
+    marginRight: 10,
+    // You can also adjust item spacing here
+
+
   },
   tabBarLabel: {
     fontFamily: "Poppins-Medium",

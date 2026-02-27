@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -20,24 +20,9 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Check if user is already logged in
-  useEffect(() => {
-    checkUser();
-  }, []);
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        router.replace("/(tabs)/home");
-      }
-    } catch (error) {
-      console.log("Error checking session:", error);
-    }
-  };
+  // Remove the checkUser useEffect - this should be handled by index.tsx
 
   const handleLogin = async () => {
-    // Validate inputs
     if (!email.trim() || !password.trim()) {
       Alert.alert("Error", "Please fill in all fields");
       return;
@@ -55,7 +40,10 @@ export default function LoginScreen() {
         Alert.alert("Login Failed", error.message);
       } else {
         Alert.alert("Success", "Logged in successfully!", [
-          { text: "OK", onPress: () => router.replace("/(tabs)/home") }
+          { 
+            text: "OK", 
+            onPress: () => router.replace("/(tabs)/home") // Changed from "../(tabs)/home"
+          }
         ]);
       }
     } catch (error) {
@@ -66,18 +54,15 @@ export default function LoginScreen() {
   };
 
   const handleSignUp = () => {
-    router.push("/screens/SignupScreen");
+    router.push("/screens/SignupScreen"); // This is correct if SignupScreen is in same folder
   };
 
   const handleForgotPassword = () => {
-    // Navigate to forgot password screen (create this later)
     Alert.alert("Info", "Password reset coming soon!");
-    // router.push("/screens/ForgotPasswordScreen");
   };
 
   const handleSocialLogin = (provider: string) => {
     Alert.alert("Info", `${provider} login coming soon!`);
-    // Implement social login later
   };
 
   return (
@@ -88,16 +73,11 @@ export default function LoginScreen() {
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          {/* Header */}
           <Text style={styles.title}>LOG IN NOW</Text>
           <Text style={styles.subtitle}>
             Please log-in your account to continue using our app
           </Text>
 
-
-          {/* Input Fields 
-          Email: test@example.com 
-          Password: Test123! */}
           <View style={styles.inputContainer}>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -108,7 +88,6 @@ export default function LoginScreen() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                autoComplete="email"
                 editable={!loading}
               />
             </View>
@@ -121,13 +100,11 @@ export default function LoginScreen() {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
-                autoComplete="password"
                 editable={!loading}
               />
             </View>
           </View>
 
-          {/* Forgot Password */}
           <TouchableOpacity 
             style={styles.forgotContainer}
             onPress={handleForgotPassword}
@@ -136,7 +113,6 @@ export default function LoginScreen() {
             <Text style={styles.forgotText}>Forgot Password</Text>
           </TouchableOpacity>
 
-          {/* Login Button */}
           <TouchableOpacity 
             style={[styles.loginButton, loading && styles.loginButtonDisabled]}
             onPress={handleLogin}
@@ -149,7 +125,6 @@ export default function LoginScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Sign Up Link */}
           <View style={styles.signUpContainer}>
             <Text style={styles.signUpText}>Don't have account? </Text>
             <TouchableOpacity onPress={handleSignUp} disabled={loading}>
@@ -157,14 +132,10 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Social Login */}
           <Text style={styles.orContinueText}>or continue with</Text>
           
           <View style={styles.socialContainer}>
-            <TouchableOpacity 
-              onPress={() => handleSocialLogin("Facebook")}
-              disabled={loading}
-            >
+            <TouchableOpacity onPress={() => handleSocialLogin("Facebook")} disabled={loading}>
               <Image 
                 source={require("../../assets/images/fb-icon.png")} 
                 style={styles.socialIcon}
@@ -172,10 +143,7 @@ export default function LoginScreen() {
               />
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              onPress={() => handleSocialLogin("Google")}
-              disabled={loading}
-            >
+            <TouchableOpacity onPress={() => handleSocialLogin("Google")} disabled={loading}>
               <Image 
                 source={require("../../assets/images/gmail-icon.png")} 
                 style={styles.socialIcon}
@@ -188,7 +156,6 @@ export default function LoginScreen() {
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,

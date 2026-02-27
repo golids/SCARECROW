@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontFamily: "Poppins-Bold",
-    color: "#000000",
+    color: "#004E00",
     textAlign: "center",
     marginBottom: 4,
   },

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -46,96 +47,104 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ImageBackground
+      source={require("../../assets/images/tabs-bg.png")}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        {/* ── Header ── */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Settings</Text>
+        </View>
 
-      {/* ── Header ── */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
-      </View>
+        {/* ── Settings Options ── */}
+        <View style={styles.section}>
+          <TouchableOpacity style={styles.settingRow}>
+            <Ionicons name="person-outline" size={20} color="#004E00" />
+            <Text style={styles.settingText}>Account</Text>
+            <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
+          </TouchableOpacity>
 
-      {/* ── Settings Options (add more here later) ── */}
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.settingRow}>
-          <Ionicons name="person-outline" size={20} color="#004E00" />
-          <Text style={styles.settingText}>Account</Text>
-          <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
-        </TouchableOpacity>
+          <View style={styles.divider} />
 
-        <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow}>
+            <Ionicons name="notifications-outline" size={20} color="#004E00" />
+            <Text style={styles.settingText}>Notifications</Text>
+            <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingRow}>
-          <Ionicons name="notifications-outline" size={20} color="#004E00" />
-          <Text style={styles.settingText}>Notifications</Text>
-          <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
-        </TouchableOpacity>
+          <View style={styles.divider} />
 
-        <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow}>
+            <Ionicons name="lock-closed-outline" size={20} color="#004E00" />
+            <Text style={styles.settingText}>Privacy</Text>
+            <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingRow}>
-          <Ionicons name="lock-closed-outline" size={20} color="#004E00" />
-          <Text style={styles.settingText}>Privacy</Text>
-          <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
-        </TouchableOpacity>
+          <View style={styles.divider} />
 
-        <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow}>
+            <Ionicons name="help-circle-outline" size={20} color="#004E00" />
+            <Text style={styles.settingText}>Help & Support</Text>
+            <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={styles.settingRow}>
-          <Ionicons name="help-circle-outline" size={20} color="#004E00" />
-          <Text style={styles.settingText}>Help & Support</Text>
-          <Ionicons name="chevron-forward" size={18} color="#808080" style={styles.chevron} />
-        </TouchableOpacity>
-      </View>
-
-      {/* ── Logout Button (bottom) ── */}
-      <View style={styles.logoutContainer}>
-        <TouchableOpacity
-          style={[styles.logoutButton, loading && styles.logoutButtonDisabled]}
-          onPress={handleLogout}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <>
-              <Ionicons name="log-out-outline" size={20} color="#fff" style={{ marginRight: 8 }} />
-              <Text style={styles.logoutText}>Log Out</Text>
-            </>
-          )}
-        </TouchableOpacity>
-      </View>
-
-    </SafeAreaView>
+        {/* ── Logout Button ── */}
+        <View style={styles.logoutContainer}>
+          <TouchableOpacity
+            style={[styles.logoutButton, loading && styles.logoutButtonDisabled]}
+            onPress={handleLogout}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#1a3a0d" size="small" />
+            ) : (
+              <>
+                <Ionicons name="log-out-outline" size={30} color="#1a3a0d" style={{ marginRight: 8 }} />
+                <Text style={styles.logoutText}>Log Out</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#f5f9f0",
   },
-
-  // header
   header: {
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#e0edd0",
+    backgroundColor: "rgba(255, 255, 255, 0.3)", // Optional: semi-transparent header background
+    backdropFilter: "blur(5px)", // Optional: blur effect (may not work in React Native)
   },
   headerTitle: {
     fontSize: 22,
     fontFamily: "Poppins-Bold",
     color: "#1a3a0d",
   },
-
-  // settings rows
   section: {
     marginTop: 20,
     marginHorizontal: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(249, 255, 161, 0.8)", // Semi-transparent white for readability
     borderRadius: 14,
     borderWidth: 1.5,
     borderColor: "#c8e890",
     overflow: "hidden",
+    // Optional: add backdrop blur effect
+    // backdropFilter: "blur(10px)",
   },
   settingRow: {
     flexDirection: "row",
@@ -155,26 +164,27 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "#e0edd0",
+    backgroundColor: "rgba(249, 255, 161, 1)",
     marginHorizontal: 16,
   },
-
-  // logout
   logoutContainer: {
     position: "absolute",
-    bottom: 100, // sits above the tab bar
+    bottom: 100,
     left: 16,
     right: 16,
   },
   logoutButton: {
     flexDirection: "row",
-    backgroundColor: "#004E00",
+    backgroundColor: "rgba(249, 255, 161, 0.8)", 
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: 10,
     alignItems: "center",
+    height: 55,
+    width: "85%",
+    alignSelf: "center",
     justifyContent: "center",
     borderWidth: 1.5,
-    borderColor: "#080647",
+    borderColor: "#004E00",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
@@ -185,7 +195,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   logoutText: {
-    color: "#fff",
+    color: "#1a3a0d",
     fontSize: 16,
     fontFamily: "Poppins-SemiBold",
     letterSpacing: 0.5,

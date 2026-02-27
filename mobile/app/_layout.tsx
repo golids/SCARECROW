@@ -1,3 +1,4 @@
+// app/_layout.tsx
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -12,14 +13,10 @@ export default function RootLayout() {
     "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    // Add any other Poppins variants you have
-    // "Poppins-Light": require("../assets/fonts/Poppins-Light.ttf"),
-    // "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
   });
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
-      // Hide splash screen once fonts are loaded or if there's an error
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
@@ -33,6 +30,22 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
-    />
+    >
+      {/* Define your index screen (landing/auth) */}
+      <Stack.Screen 
+        name="index" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
+      
+      {/* Define your tabs group as a screen */}
+      <Stack.Screen 
+        name="(tabs)" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
+    </Stack>
   );
 }
