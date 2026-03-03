@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,38 +11,54 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { supabase } from "../lib/supabase";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const params = useLocalSearchParams<{ phone?: string }>();
 
-  // Remove the checkUser useEffect - this should be handled by index.tsx
+  // Pre-fill phone number if coming from signup
+  useEffect(() => {
+    if (params.phone) {
+      setPhoneNumber(params.phone);
+    }
+  }, [params.phone]);
 
   const handleLogin = async () => {
-    if (!email.trim() || !password.trim()) {
+    if (!phoneNumber.trim() || !password.trim()) {
       Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    // Basic phone number validation
+    if (phoneNumber.length < 10) {
+      Alert.alert("Error", "Please enter a valid phone number");
       return;
     }
 
     setLoading(true);
     
     try {
+      // Automatically append domain to phone number
+      const email = `${phoneNumber.trim()}@scarecrow.app`;
+
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: email,
         password: password,
       });
 
       if (error) {
         Alert.alert("Login Failed", error.message);
       } else {
+        // Login successful
         Alert.alert("Success", "Logged in successfully!", [
           { 
             text: "OK", 
-            onPress: () => router.replace("/(tabs)/home") // Changed from "../(tabs)/home"
+            onPress: () => router.replace("/(tabs)/home")
           }
         ]);
       }
@@ -54,11 +70,47 @@ export default function LoginScreen() {
   };
 
   const handleSignUp = () => {
-    router.push("/screens/SignupScreen"); // This is correct if SignupScreen is in same folder
+    router.push("/screens/SignupScreen");
   };
 
   const handleForgotPassword = () => {
-    Alert.alert("Info", "Password reset coming soon!");
+    if (!phoneNumber.trim()) {
+      Alert.alert("Error", "Please enter your phone number to reset password");
+      return;
+    }
+
+    Alert.alert(
+      "Reset Password",
+      `A reset link will be sent to ${phoneNumber}@scarecrow.app`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Send",
+          onPress: async () => {
+            setLoading(true);
+            try {
+              const email = `${phoneNumber.trim()}@scarecrow.app`;
+              const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'yourapp://reset-password', // Update this with your app scheme
+              });
+
+              if (error) {
+                Alert.alert("Error", error.message);
+              } else {
+                Alert.alert(
+                  "Password Reset",
+                  "If this phone number is registered, you will receive password reset instructions."
+                );
+              }
+            } catch (error) {
+              Alert.alert("Error", "Network error. Please try again.");
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -82,15 +134,22 @@ export default function LoginScreen() {
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder="Phone Number"
                 placeholderTextColor="#808080"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
                 autoCapitalize="none"
                 editable={!loading}
               />
             </View>
+
+            {/* Hint text showing the actual login format */}
+            {phoneNumber.length > 0 && (
+              <Text style={styles.hintText}>
+                You'll login as: {phoneNumber}@scarecrow.app
+              </Text>
+            )}
             
             <View style={styles.inputWrapper}>
               <TextInput
@@ -156,6 +215,7 @@ export default function LoginScreen() {
     </ImageBackground>
   );
 }
+
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -207,6 +267,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Poppins-Regular",
     color: "#000000",
+  },
+  hintText: {
+    fontSize: 10,
+    fontFamily: "Poppins-Regular",
+    color: "#004E00",
+    marginLeft: "5%",
+    marginTop: -8,
+    marginBottom: 8,
+    fontStyle: "italic",
   },
   forgotContainer: {
     alignItems: "flex-end",

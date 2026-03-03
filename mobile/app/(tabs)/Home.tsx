@@ -47,229 +47,252 @@ const ACTIVITY_LOG = [
   { time: "7:38AM",  label: "3 Birds Detected", ago: "3 hours ago"    },
 ];
 
-export default function HomeScreen() {
-  return (
-    <ImageBackground
-      source={require("../../assets/images/home-bg.png")}
-      style={styles.bg}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay} />
-
-      <SafeAreaView style={styles.safe} edges={["top"]}>
-
-        {/* Add button absolutely positioned top-right */}
-        <TouchableOpacity style={styles.addBtn}>
-          <Ionicons name="add" size={22} color="#fff" />
-        </TouchableOpacity>
-
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Welcome Text */}
-          <Text style={styles.welcome}>Welcome back, John Doe</Text>
-
-          {/* Connection Card */}
-          <View style={styles.card}>
-            <View style={styles.connectionLeft}>
-              <MaterialIcons name="wifi" size={18} color="#004E00" />
-              <View style={{ marginLeft: 8 }}>
-                <Text style={styles.connLabel}>Connected to</Text>
-                <Text style={styles.connValue}>Farm WiFi-4567</Text>
-              </View>
-            </View>
-            <View style={styles.dividerVert} />
-            <View style={styles.connectionRight}>
-              <Ionicons name="location-outline" size={16} color="#004E00" />
-              <View style={{ marginLeft: 4 }}>
-                <Text style={styles.connLabel}>Farm Size</Text>
-                <Text style={styles.connValueLarge}>150 acres</Text>
-              </View>
-            </View>
+  export default function HomeScreen() {
+    return (
+      <ImageBackground
+        source={require("../../assets/images/home-bg.png")}
+        style={styles.bg}
+        resizeMode="cover"
+      >
+        {/* Semi-transparent overlay */}
+        <View style={styles.overlay} />
+        
+        <SafeAreaView style={styles.safe} edges={["top"]}>
+          {/* Fixed Add Button */}
+          <TouchableOpacity style={styles.addBtn}>
+            <Ionicons name="add" size={22} color="#fff" />
+          </TouchableOpacity>
+          
+          {/* Fixed Welcome Title - This stays at the top */}
+          <View style={styles.fixedTitleContainer}>
+            <Text style={styles.welcome}>Welcome back, John Doe</Text>
           </View>
+          
+          {/* Scrollable Cards - Only these scroll */}
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            bounces={true}
+          >
+            {/* Spacer to push content below the fixed title */}
+            <View style={styles.topSpacer} />
 
-          {/* Device Overview Section */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Device Overview</Text>
-              <TouchableOpacity>
-                <Text style={styles.sectionLink}>Manage &gt;</Text>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={styles.deviceRow}>
-              <View style={styles.deviceIconWrap}>
-                <ScarecrowIcon size={36} />
-              </View>
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <Text style={styles.deviceName}>Field Scarecrow #1</Text>
-                <Text style={styles.deviceStatus}>Active</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color="#004E00" />
-            </TouchableOpacity>
-
-            <View style={styles.birdBanner}>
-              <View style={styles.birdBannerLeft}>
-                <Text style={styles.birdEmoji}>🐦</Text>
-                <Text style={styles.birdBannerText}>
-                  <Text style={styles.birdCount}>5 Birds</Text> Today
-                </Text>
-              </View>
-              <Text style={styles.birdBannerTotal}>
-                <Text style={styles.birdCount}>29</Text> Total This Week
-              </Text>
-            </View>
-
-            <View style={styles.speciesRow}>
-              {BIRD_STATS.map((b) => (
-                <View key={b.label} style={styles.speciesCard}>
-                  <Text style={styles.speciesEmoji}>{b.icon}</Text>
-                  <View style={{ marginTop: 4 }}>
-                    <Text style={styles.speciesCount}>{b.count} {b.label}</Text>
-                    <Text style={styles.speciesPct}>▲{b.pct}</Text>
-                    <Text style={styles.speciesSub}>{b.sub}</Text>
-                  </View>
+            {/* Connection Card */}
+            <View style={styles.card}>
+              <View style={styles.connectionLeft}>
+                <MaterialIcons name="wifi" size={18} color="#004E00" />
+                <View style={{ marginLeft: 8 }}>
+                  <Text style={styles.connLabel}>Connected to</Text>
+                  <Text style={styles.connValue}>Farm WiFi-4567</Text>
                 </View>
-              ))}
-            </View>
-          </View>
-
-          {/* Recent Activity Log Section */}
-          <View style={[styles.section, { marginBottom: 100 }]}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Recent Activity Log</Text>
-              <TouchableOpacity>
-                <Text style={styles.sectionLink}>View All &gt;</Text>
-              </TouchableOpacity>
+              </View>
+              <View style={styles.dividerVert} />
+              <View style={styles.connectionRight}>
+                <Ionicons name="location-outline" size={16} color="#004E00" />
+                <View style={{ marginLeft: 4 }}>
+                  <Text style={styles.connLabel}>Farm Size</Text>
+                  <Text style={styles.connValueLarge}>150 acres</Text>
+                </View>
+              </View>
             </View>
 
-            {ACTIVITY_LOG.map((log, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[styles.logRow, i < ACTIVITY_LOG.length - 1 && { marginBottom: 8 }]}
-              >
-                <View style={styles.logIconWrap}>
-                  <Text style={{ fontSize: 22 }}>🐦</Text>
+            {/* Device Overview Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Device Overview</Text>
+                <TouchableOpacity>
+                  <Text style={styles.sectionLink}>Manage &gt;</Text>
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity style={styles.deviceRow}>
+                <View style={styles.deviceIconWrap}>
+                  <ScarecrowIcon size={36} />
                 </View>
                 <View style={{ flex: 1, marginLeft: 12 }}>
-                  <View style={{ flexDirection: "row", gap: 6 }}>
-                    <Text style={styles.logTime}>{log.time}</Text>
-                    <Text style={styles.logLabel}>{log.label}</Text>
-                  </View>
-                  <Text style={styles.logAgo}>{log.ago}</Text>
+                  <Text style={styles.deviceName}>Field Scarecrow #1</Text>
+                  <Text style={styles.deviceStatus}>Active</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={16} color="#004E00" />
+                <Ionicons name="chevron-forward" size={18} color="#004E00" />
               </TouchableOpacity>
-            ))}
-          </View>
 
-        </ScrollView>
-      </SafeAreaView>
-    </ImageBackground>
-  );
-}
+              <View style={styles.birdBanner}>
+                <View style={styles.birdBannerLeft}>
+                  <Text style={styles.birdEmoji}>🐦</Text>
+                  <Text style={styles.birdBannerText}>
+                    <Text style={styles.birdCount}>5 Birds</Text> Today
+                  </Text>
+                </View>
+                <Text style={styles.birdBannerTotal}>
+                  <Text style={styles.birdCount}>29</Text> Total This Week
+                </Text>
+              </View>
 
-const styles = StyleSheet.create({
-  bg: { 
-    flex: 1, 
-    width: "100%", 
-    height: "100%" 
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(200,230,160,0.18)",
-  },
-  safe: { 
-    flex: 1 
-  },
-  addBtn: {
-    position: "absolute",
-    top: 70,
-    right: 16,
-    zIndex: 10,
-    width: 38,
-    height: 38,
-    borderRadius: 10,
-    backgroundColor: "#004E00",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1.5,
-    borderColor: "#080647",
-  },
-  scroll: { 
-    flex: 1 
-  },
-  scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 260, // Adjust this value based on your background image
-  },
-  welcome: {
-    fontSize: 16,
-    fontFamily: "Poppins-SemiBold",
-    color: "#1a3a0d",
-    marginBottom: 10,
-  },
-  card: {
-    flexDirection: "row",
-    backgroundColor: "rgba(249, 255, 161, .8)",
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
-    borderWidth: 1.5,
-    borderColor: "rgba(249, 255, 161, 1)",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  connectionLeft: { 
-    flex: 1, 
-    flexDirection: "row", 
-    alignItems: "center" 
-  },
-  connectionRight: { 
-    flex: 1, 
-    flexDirection: "row", 
-    alignItems: "center", 
-    paddingLeft: 12 
-  },
-  dividerVert: { 
-    width: 1.5, 
-    height: 36, 
-    backgroundColor: "#rgba(249, 255, 161, .8)" ,
-  },
-  connLabel: { 
-    fontSize: 10, 
-    fontFamily: "Poppins-Regular", 
-    color: "#808080" 
-  },
-  connValue: { 
-    fontSize: 13, 
-    fontFamily: "Poppins-SemiBold", 
-    color: "#1a3a0d" 
-  },
-  connValueLarge: { 
-    fontSize: 18, 
-    fontFamily: "Poppins-Bold", 
-    color: "#004E00" 
-  },
-  section: {
-    backgroundColor: "rgba(249, 255, 161, 0.8)",
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
-    borderWidth: 1.5,
-    borderColor: "#c8e890",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
-  },
+              <View style={styles.speciesRow}>
+                {BIRD_STATS.map((b) => (
+                  <View key={b.label} style={styles.speciesCard}>
+                    <Text style={styles.speciesEmoji}>{b.icon}</Text>
+                    <View style={{ marginTop: 4 }}>
+                      <Text style={styles.speciesCount}>{b.count} {b.label}</Text>
+                      <Text style={styles.speciesPct}>▲{b.pct}</Text>
+                      <Text style={styles.speciesSub}>{b.sub}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            {/* Recent Activity Log Section */}
+            <View style={[styles.section, { marginBottom: 100 }]}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Recent Activity Log</Text>
+                <TouchableOpacity>
+                  <Text style={styles.sectionLink}>View All &gt;</Text>
+                </TouchableOpacity>
+              </View>
+
+              {ACTIVITY_LOG.map((log, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={[styles.logRow, i < ACTIVITY_LOG.length - 1 && { marginBottom: 8 }]}
+                >
+                  <View style={styles.logIconWrap}>
+                    <Text style={{ fontSize: 22 }}>🐦</Text>
+                  </View>
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <View style={{ flexDirection: "row", gap: 6 }}>
+                      <Text style={styles.logTime}>{log.time}</Text>
+                      <Text style={styles.logLabel}>{log.label}</Text>
+                    </View>
+                    <Text style={styles.logAgo}>{log.ago}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={16} color="#004E00" />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
+    );
+  }
+
+  const styles = StyleSheet.create({
+    bg: { 
+      flex: 1, 
+      width: "100%", 
+      height: "100%" 
+    },
+    overlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: "rgba(200,230,160,0.18)",
+    },
+    safe: { 
+      flex: 1,
+      position: 'relative',
+    },
+    addBtn: {
+      position: "absolute",
+      top: 70,
+      right: 16,
+      zIndex: 30, // Higher z-index to stay above everything
+      width: 38,
+      height: 38,
+      borderRadius: 10,
+      backgroundColor: "#004E00",
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1.5,
+      borderColor: "#080647",
+    },
+    // Fixed title container - stays at the top
+    fixedTitleContainer: {
+      position: "absolute",
+      top: 290, // Adjust this to position the title vertically
+      left: 16,
+      right: 16,
+      zIndex: 20, // Lower than addBtn but above scrollable content
+      backgroundColor: "transparent", // Make it transparent so background shows through
+    },
+    welcome: {
+      fontSize: 16,
+      fontFamily: "Poppins-SemiBold",
+      color: "#1a3a0d",
+    },
+    scroll: { 
+      flex: 1,
+    },
+      scrollContent: {
+      paddingTop: 200, // This adds space at the top of the entire scroll content
+      paddingBottom: 80,
+
+    },
+
+    // Spacer to push scrollable content below the fixed title
+    topSpacer: {
+      height: 260, // Adjust this to match the space needed for fixed title + add button
+    },
+    card: {
+      flexDirection: "row",
+      backgroundColor: "rgba(249, 255, 161, .8)",
+      borderRadius: 14,
+      padding: 14,
+      marginBottom: 14,
+      marginHorizontal: 16,
+      borderWidth: 1.5,
+      borderColor: "rgba(249, 255, 161, 1)",
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    connectionLeft: { 
+      flex: 1, 
+      flexDirection: "row", 
+      alignItems: "center" 
+    },
+    connectionRight: { 
+      flex: 1, 
+      flexDirection: "row", 
+      alignItems: "center", 
+      paddingLeft: 12 
+    },
+    dividerVert: { 
+      width: 1.5, 
+      height: 36, 
+      backgroundColor: "rgba(249, 255, 161, .8)" ,
+    },
+    connLabel: { 
+      fontSize: 10, 
+      fontFamily: "Poppins-Regular", 
+      color: "#808080" 
+    },
+    connValue: { 
+      fontSize: 13, 
+      fontFamily: "Poppins-SemiBold", 
+      color: "#1a3a0d" 
+    },
+    connValueLarge: { 
+      fontSize: 18, 
+      fontFamily: "Poppins-Bold", 
+      color: "#004E00" 
+    },
+    section: {
+      backgroundColor: "rgba(249, 255, 161, 0.8)",
+      borderRadius: 14,
+      padding: 14,
+      marginBottom: 14,
+      marginHorizontal: 16,
+      borderWidth: 1.5,
+      borderColor: "#c8e890",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+      elevation: 3,
+    },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",

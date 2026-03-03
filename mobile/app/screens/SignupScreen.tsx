@@ -27,73 +27,102 @@ export default function SignUpScreen() {
   const router = useRouter();
 
   const handleSignUp = async () => {
-    if (
-      !name.trim() ||
-      !contactNumber.trim() ||
-      !province.trim() ||
-      !municipality.trim() ||
-      !barangay.trim() ||
-      !password.trim()
-    ) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
+  // Validation checks
+  if (
+    !name.trim() ||
+    !contactNumber.trim() ||
+    !province.trim() ||
+    !municipality.trim() ||
+    !barangay.trim() ||
+    !password.trim()
+  ) {
+    Alert.alert("Error", "Please fill in all fields");
+    return;
+  }
 
-    if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
-      return;
-    }
+  if (password.length < 6) {
+    Alert.alert("Error", "Password must be at least 6 characters");
+    return;
+  }
 
-    setLoading(true);
+  // Validate phone number (basic validation)
+  if (contactNumber.length < 10) {
+    Alert.alert("Error", "Please enter a valid contact number (at least 10 digits)");
+    return;
+  }
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: `${contactNumber.trim()}@scarecrow.app`,
-        password: password,
-        options: {
-          data: {
-            full_name: name.trim(),
-            contact_number: contactNumber.trim(),
-            province: province.trim(),
-            municipality: municipality.trim(),
-            barangay: barangay.trim(),
-          },
+  setLoading(true);
+
+  try {
+    // Automatically append domain to contact number
+    const email = `${contactNumber.trim()}@scarecrow.app`;
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: name.trim(),
+          contact_number: contactNumber.trim(),
+          province: province.trim(),
+          municipality: municipality.trim(),
+          barangay: barangay.trim(),
         },
-      });
+      },
+    });
 
-      if (error) {
-        Alert.alert("Sign Up Failed", error.message);
-        return;
-      }
-
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .insert([
-            {
-              id: data.user.id,
-              full_name: name.trim(),
-              contact_number: contactNumber.trim(),
-              province: province.trim(),
-              municipality: municipality.trim(),
-              barangay: barangay.trim(),
-            },
-          ]);
-
-        if (profileError) {
-          console.warn("Profile insert error:", profileError.message);
-        }
-      }
-
-      Alert.alert("Success", "Account created successfully! Please log in.", [
-        { text: "OK", onPress: () => router.replace("/screens/LoginScreen") },
-      ]);
-    } catch (error) {
-      Alert.alert("Error", "Network error. Please check your connection and try again.");
-    } finally {
-      setLoading(false);
+    if (error) {
+      Alert.alert("Sign Up Failed", error.message);
+      return;
     }
-  };
+
+    // If signup successful and user exists, update the profile with complete address
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .upsert({
+          id: data.user.id,
+          full_name: name.trim(),
+          contact_number: contactNumber.trim(),
+          province: province.trim(),
+          municipality: municipality.trim(),
+          barangay: barangay.trim(),
+        }, {
+          onConflict: 'id'
+        });
+
+      if (profileError) {
+        console.warn("Profile update error:", profileError.message);
+      }
+    }
+
+    // Since email confirmation is disabled, we can offer to log them in immediately
+    Alert.alert(
+      "Success", 
+      "Account created successfully! Would you like to log in now?",
+      [
+        { 
+          text: "Login Now", 
+          onPress: () => {
+            // Automatically fill login screen with phone number
+            router.replace({
+              pathname: "/screens/LoginScreen",
+              params: { phone: contactNumber.trim() } // Pre-fill phone number
+            });
+          }
+        },
+        { 
+          text: "Later", 
+          style: "cancel"
+        }
+      ]
+    );
+  } catch (error) {
+    Alert.alert("Error", "Network error. Please check your connection and try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <ImageBackground
@@ -117,7 +146,6 @@ export default function SignUpScreen() {
 
             {/* Form */}
             <View style={styles.inputContainer}>
-
               <View style={styles.inputWrapper}>
                 <TextInput
                   style={styles.input}
@@ -141,6 +169,13 @@ export default function SignUpScreen() {
                   editable={!loading}
                 />
               </View>
+
+              {/* Hint text for phone number format */}
+              {contactNumber.length > 0 && (
+                <Text style={styles.hintText}>
+                  You'll use {contactNumber} to log in
+                </Text>
+              )}
 
               <Text style={styles.sectionLabel}>ADDRESS</Text>
 
@@ -214,7 +249,6 @@ export default function SignUpScreen() {
                 <Text style={styles.loginLink}>Log In</Text>
               </TouchableOpacity>
             </View>
-
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -278,6 +312,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Poppins-Regular",
     color: "#000000",
+  },
+  hintText: {
+    fontSize: 10,
+    fontFamily: "Poppins-Regular",
+    color: "#004E00",
+    marginLeft: "5%",
+    marginTop: -8,
+    marginBottom: 8,
+    fontStyle: "italic",
   },
   sectionLabel: {
     fontSize: 12,

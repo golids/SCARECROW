@@ -1,4 +1,3 @@
-// app/(tabs)/_layout.tsx
 import { Tabs } from "expo-router";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,8 +24,12 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={22} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "home" : "home-outline"} 
+              size={22} 
+              color={color} 
+            />
           ),
         }}
       />
@@ -34,8 +37,12 @@ export default function TabsLayout() {
         name="live"
         options={{
           title: "Live",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="videocam" size={22} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "videocam" : "videocam-outline"} 
+              size={22} 
+              color={color} 
+            />
           ),
         }}
       />
@@ -43,8 +50,12 @@ export default function TabsLayout() {
         name="logs"
         options={{
           title: "Logs",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="newspaper" size={22} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "document-text" : "document-text-outline"} 
+              size={22} 
+              color={color} 
+            />
           ),
         }}
       />
@@ -52,8 +63,12 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: "Settings",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="settings" size={22} color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "settings" : "settings-outline"} 
+              size={22} 
+              color={color} 
+            />
           ),
         }}
       />
@@ -67,17 +82,18 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    height: 60, // Changed from implicit to explicit - increase/decrease this value
-    width: width * 1, // 90% of screen width
-    alignSelf: "center", // Centers the tab bar when width is set
-    borderRadius: 20, // Increased to match new height (height/2 for pill shape)
-    backgroundColor: "transparent",
+    height: 60,
+    width: width * 1,
+    alignSelf: "center",
+    borderRadius: 20,
+    backgroundColor: "transparent", // Keep transparent
     elevation: 0,
     borderTopWidth: 0,
+    // Shadow for depth
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
   },
   tabBarBackground: {
     position: "absolute",
@@ -85,10 +101,18 @@ const styles = StyleSheet.create({
     left: 15,
     right: 15,
     bottom: 0,
-    backgroundColor: "rgba(249, 255, 161, 1)",
-    borderRadius: 20, // Match tabBar borderRadius
-    borderWidth: 1.5,
-    borderColor: "#080647",
+    // Glass morphism effect - semi-transparent with blur
+    backgroundColor: "rgba(249, 255, 200, 0.75)", // More transparent
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.3)", // Light border for glass effect
+    // Backdrop blur will be handled by React Native's native stack
+    // You can add a slight overlay for better glass effect
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   tabBarItem: {
     paddingVertical: 4,
@@ -96,9 +120,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginLeft: 10,
     marginRight: 10,
-    // You can also adjust item spacing here
-
-
   },
   tabBarLabel: {
     fontFamily: "Poppins-Medium",
